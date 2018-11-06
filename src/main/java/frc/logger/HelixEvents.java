@@ -1,6 +1,5 @@
 package frc.logger;
-
-import java.io.File;
+ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -10,41 +9,27 @@ import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import edu.wpi.first.wpilibj.DriverStation;
+ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
-
-public class HelixEvents {
-
-	private static HelixEvents INSTANCE = new HelixEvents();
-
-	/**
-	 * @return the singleton instance of HelixEvents
-	 */
-	public static HelixEvents getInstance() {
+ public class HelixEvents {
+ 	private static HelixEvents INSTANCE = new HelixEvents();
+ 	public static HelixEvents getInstance() {
 		return INSTANCE;
 	}
-
-	private HelixEvents() { }
+ 	private HelixEvents() { }
 	
 	private static final Notifier log = new Notifier(new LogSaver());
 	private static Path file;
+	private static String loggingLocation = "/home/lvuser/logs/";
 	
 	private static final Queue<String> events = new LinkedList<>();
 	
-	/**
-	 * Start logging 
-	 */
-	public void startLogging(String loggingLocation) {
-		if (loggingLocation != null) {
-			File usb1 = new File(loggingLocation);
-				if (usb1.exists()) {
-					createFile(loggingLocation + "logs/");
-			}
-		} else {
-			createFile("/home/lvuser/logs/");
+	public void startLogging() {
+		File usb1 = new File("/media/sda1/");
+		if (usb1.exists()) {
+			loggingLocation = "/media/sda1/logs/";
 		}
-		
+		createFile();
 		log.startPeriodic(1);
 	}
 	
@@ -58,17 +43,17 @@ public class HelixEvents {
 				.toString());
 	}
 	
-	private static void createLogDirectory(String loggingLocation) throws IOException {
+	private static void createLogDirectory() throws IOException {
 		File logDirectory = new File(loggingLocation);
 		if (!logDirectory.exists()) {
 			Files.createDirectory(Paths.get(loggingLocation));
 		}
 	}
 	
-	private static void createFile(String loggingLocation) {
+	private static void createFile() {
 		Writer output = null;
 		try {
-			createLogDirectory(loggingLocation);
+			createLogDirectory();
 			if (DriverStation.getInstance().isFMSAttached()) {
 				file = Paths.get(loggingLocation + 
 						DriverStation.getInstance().getEventName() + "_"+ 
@@ -107,4 +92,4 @@ public class HelixEvents {
 			}
 		}
 	}
-}
+} 
