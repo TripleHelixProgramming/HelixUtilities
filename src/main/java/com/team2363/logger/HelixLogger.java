@@ -1,4 +1,4 @@
-package frc.logger;
+package com.team2363.logger;
 
 import java.io.File;
 import java.io.IOException;

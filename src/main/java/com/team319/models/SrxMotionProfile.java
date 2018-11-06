@@ -1,4 +1,4 @@
-package frc.models;
+package com.team319.models;
 
 //Generic Motion Profile Class
 public class SrxMotionProfile {

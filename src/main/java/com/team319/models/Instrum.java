@@ -1,4 +1,4 @@
-package frc.models;
+package com.team319.models;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;

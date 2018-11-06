@@ -1,5 +1,6 @@
-package frc.logger;
- import java.io.File;
+package com.team2363.logger;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -9,9 +10,10 @@ import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.Queue;
- import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
- public class HelixEvents {
+
+public class HelixEvents {
  	private static HelixEvents INSTANCE = new HelixEvents();
  	public static HelixEvents getInstance() {
 		return INSTANCE;

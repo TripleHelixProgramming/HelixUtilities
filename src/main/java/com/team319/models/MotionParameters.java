@@ -1,4 +1,4 @@
-package frc.models;
+package com.team319.models;
 
 public class MotionParameters {
 	private int _acceleration = 0;

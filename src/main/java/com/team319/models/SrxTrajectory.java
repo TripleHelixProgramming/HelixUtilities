@@ -1,4 +1,4 @@
-package frc.models;
+package com.team319.models;
 
 //Combines left and right motion profiles in one object
 public class SrxTrajectory {
