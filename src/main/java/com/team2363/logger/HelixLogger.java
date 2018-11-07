@@ -73,8 +73,32 @@ public class HelixLogger {
 		}
 	}
 
-	public void addSource(String name, Supplier<String> supplier) {
-		dataSources.add(new LogSource(name, supplier));
+	public void addSource(String name, Supplier<Object> supplier) {
+		dataSources.add(new LogSource(name, () -> supplier.get().toString()));
+	}
+
+	public void addDoubleSource(String name, Supplier<Double> supplier) {
+		dataSources.add(new LogSource(name, () -> supplier.get().toString()));
+	}
+
+	public void addIntegerSource(String name, Supplier<Integer> supplier) {
+		dataSources.add(new LogSource(name, () -> supplier.get().toString()));
+	}
+
+	public void addLongSource(String name, Supplier<Long> supplier) {
+		dataSources.add(new LogSource(name, () -> supplier.get().toString()));
+	}
+
+	public void addBooleanSource(String name, Supplier<Boolean> supplier) {
+		dataSources.add(new LogSource(name, () -> supplier.get().toString()));
+	}
+
+	public void addStringSource(String name, Supplier<String> supplier) {
+		dataSources.add(new LogSource(name, () -> supplier.get().toString()));
+	}
+
+	public void addCharacterSource(String name, Supplier<Character> supplier) {
+		dataSources.add(new LogSource(name, () -> supplier.get().toString()));
 	}
 
 	public void saveLogs() {
