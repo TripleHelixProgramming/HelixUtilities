@@ -5,8 +5,10 @@ import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 public class BobTalonSRX extends TalonSRX {
 
@@ -308,5 +310,24 @@ public class BobTalonSRX extends TalonSRX {
 	
 	public ErrorCode configMaxIntegralAccumulator(int slotIdx, double iaccum) {
 		return super.configMaxIntegralAccumulator(slotIdx, iaccum, defaultTimeoutMs);
+	}
+
+	public void configureForMotionProfileArcMode(FeedbackDevice masterEncoderType, BobTalonSRX left,
+			FeedbackDevice followerEncoderType, PigeonIMU pidgeon) {
+		left.configPrimaryFeedbackDevice(followerEncoderType);
+    	left.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
+
+		// Set the right talon to look at the left's selected sensor (quad encoder) for it's remote sensor 0
+		configRemoteSensor0(left.getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor);
+		// Set the right talon to look at the pidgeon plugged into the right slave for it's remote sensor 1
+		configRemoteSensor1(pidgeon.getDeviceID(), RemoteSensorSource.GadgeteerPigeon_Yaw);
+
+		// Configure the sum PID loop to look at remote sensor 0 and it's own quad encoder
+		configSensorSum(FeedbackDevice.RemoteSensor0, masterEncoderType);
+		// right.configSensorDif(FeedbackDevice.RemoteSensor0, FeedbackDevice.QuadEncoder);
+		// Set the primary PID loop to be the sum loop
+		configPrimaryFeedbackDevice(FeedbackDevice.SensorSum, 0.5);
+		// Set the secondary PID loop to be the pidgeon
+		configSecondaryFeedbackDevice(FeedbackDevice.RemoteSensor1, (3600.0 / 8192.0));
 	}
 }
