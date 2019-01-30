@@ -23,11 +23,12 @@ public class BobTalonSRX extends TalonSRX {
 
 	public BobTalonSRX(int deviceNumber) {
 		super(deviceNumber);
-		this.configNominalOutputForward(0.0);
-		this.configNominalOutputReverse(0.0);
-		this.configPeakOutputForward(1);
-		this.configPeakOutputReverse(-1);
-		this.configMotionProfileTrajectoryPeriod(0);
+		configFactoryDefault();
+		configNominalOutputForward(0.0);
+		configNominalOutputReverse(0.0);
+		configPeakOutputForward(1);
+		configPeakOutputReverse(-1);
+		configMotionProfileTrajectoryPeriod(0);
 	}
 
 	public int getPrimaryPidIndex() {
