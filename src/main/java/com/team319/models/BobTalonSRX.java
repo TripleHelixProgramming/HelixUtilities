@@ -2,15 +2,15 @@ package com.team319.models;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.ParamEnum;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.sensors.PigeonIMU;
 
-public class BobTalonSRX extends TalonSRX {
+public class BobTalonSRX extends TalonSRX implements IBobSmartMotorController{
 
 	private int defaultTimeoutMs = 0;
 	private int defaultPidIndex = 0;
@@ -23,12 +23,11 @@ public class BobTalonSRX extends TalonSRX {
 
 	public BobTalonSRX(int deviceNumber) {
 		super(deviceNumber);
-		configFactoryDefault();
-		configNominalOutputForward(0.0);
-		configNominalOutputReverse(0.0);
-		configPeakOutputForward(1);
-		configPeakOutputReverse(-1);
-		configMotionProfileTrajectoryPeriod(0);
+		this.configNominalOutputForward(0.0);
+		this.configNominalOutputReverse(0.0);
+		this.configPeakOutputForward(1);
+		this.configPeakOutputReverse(-1);
+		this.configMotionProfileTrajectoryPeriod(0);
 	}
 
 	public int getPrimaryPidIndex() {
@@ -146,11 +145,6 @@ public class BobTalonSRX extends TalonSRX {
 		this.configSensorTerm(SensorTerm.Sum1, feedbackDevice1);
 	}
 
-	public void configSensorDif(FeedbackDevice feedbackDevice0, FeedbackDevice feedbackDevice1) {
-		this.configSensorTerm(SensorTerm.Diff0, feedbackDevice0);
-		this.configSensorTerm(SensorTerm.Diff1, feedbackDevice1);
-	}
-
 	public void configRemoteSensor0(int remoteDeviceId, RemoteSensorSource remoteSensorSource) {
 		this.configRemoteFeedbackFilter(remoteDeviceId, remoteSensorSource, 0);
 	}
@@ -158,19 +152,19 @@ public class BobTalonSRX extends TalonSRX {
 	public void configRemoteSensor1(int remoteDeviceId, RemoteSensorSource remoteSensorSource) {
 		this.configRemoteFeedbackFilter(remoteDeviceId, remoteSensorSource, 1);
 	}
-	
+
 	public int getPrimarySensorPosition() {
 		return this.getSelectedSensorPosition(primaryPidIndex);
 	}
-	
+
 	public int getSecondarySensorPosition() {
 		return this.getSelectedSensorPosition(secondaryPidIndex);
 	}
-	
+
 	public int getPrimarySensorVelocity() {
 		return this.getSelectedSensorVelocity(primaryPidIndex);
 	}
-	
+
 	public int getSecondarySensorVelocity() {
 		return this.getSelectedSensorVelocity(secondaryPidIndex);
 	}
@@ -304,31 +298,52 @@ public class BobTalonSRX extends TalonSRX {
 	public ErrorCode configClosedloopRamp(double secondsFromNeutralToFull) {
 		return super.configClosedloopRamp(secondsFromNeutralToFull, defaultTimeoutMs);
 	}
-	
+
 	public ErrorCode configVoltageCompSaturation(double voltage) {
 		return super.configVoltageCompSaturation(voltage, defaultTimeoutMs);
 	}
-	
+
 	public ErrorCode configMaxIntegralAccumulator(int slotIdx, double iaccum) {
 		return super.configMaxIntegralAccumulator(slotIdx, iaccum, defaultTimeoutMs);
 	}
 
-	public void configureForMotionProfileArcMode(FeedbackDevice masterEncoderType, BobTalonSRX left,
-			FeedbackDevice followerEncoderType, PigeonIMU pidgeon) {
-		left.configPrimaryFeedbackDevice(followerEncoderType);
-    	left.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, 0);
+	@Override
+	public void setPercentOutput(double percentOutput) {
+		super.set(ControlMode.PercentOutput, percentOutput);
+	}
 
-		// Set the right talon to look at the left's selected sensor (quad encoder) for it's remote sensor 0
-		configRemoteSensor0(left.getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor);
-		// Set the right talon to look at the pidgeon plugged into the right slave for it's remote sensor 1
-		configRemoteSensor1(pidgeon.getDeviceID(), RemoteSensorSource.GadgeteerPigeon_Yaw);
+	@Override
+	public double getPosition() {
+		return this.getPrimarySensorPosition();
+	}
 
-		// Configure the sum PID loop to look at remote sensor 0 and it's own quad encoder
-		configSensorSum(FeedbackDevice.RemoteSensor0, masterEncoderType);
-		// right.configSensorDif(FeedbackDevice.RemoteSensor0, FeedbackDevice.QuadEncoder);
-		// Set the primary PID loop to be the sum loop
-		configPrimaryFeedbackDevice(FeedbackDevice.SensorSum, 0.5);
-		// Set the secondary PID loop to be the pidgeon
-		configSecondaryFeedbackDevice(FeedbackDevice.RemoteSensor1, (3600.0 / 8192.0));
+	@Override
+	public double getVelocity() {
+		return this.getPrimarySensorVelocity();
+	}
+
+	@Override
+	public void resetToFactoryDefaults() {
+		super.configFactoryDefault();
+	}
+
+	@Override
+	public void follow(IBobSmartMotorController leader) {
+		super.follow((TalonSRX) leader);
+	}
+
+	@Override
+	public void setPosition(double position) {
+		super.setSelectedSensorPosition((int) position);
+	}
+
+	@Override
+	public double getOutputVoltage() {
+		return super.getMotorOutputVoltage();
+	}
+
+	@Override
+	public void setBrakeMode(boolean brakeModeEnabled) {
+		super.setNeutralMode(brakeModeEnabled ? NeutralMode.Brake : NeutralMode.Coast);
 	}
 }
