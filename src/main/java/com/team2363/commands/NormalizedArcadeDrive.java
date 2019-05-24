@@ -16,10 +16,23 @@ public abstract class NormalizedArcadeDrive extends Command {
 		requires(requiredSubsystem);
 	}
 	
+	/**
+	 * Provides the throttle value [-1, 1] for the arcade calculations.
+	 * @return a value from [-1, 1] for arcade calculations
+	 */
 	protected abstract double getThrottle();
 
+	/**
+	 * Provides the turn value [-1, 1] for the arcade calculations
+	 * @return a value from [-1, 1] for arcade calculations
+	 */
 	protected abstract double getTurn();
 
+	/**
+	 * Provides the normaalized output values in a range of [-1, 1] to be passed to the drivetrain
+	 * @param left the output for the left side
+	 * @param right the output for the right side
+	 */
 	protected abstract void useOutputs(double left, double right);
 
 	@Override
