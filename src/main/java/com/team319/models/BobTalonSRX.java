@@ -4,13 +4,14 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-public class BobTalonSRX extends TalonSRX implements IBobSmartMotorController{
+public class BobTalonSRX extends TalonSRX implements BobSmartMotorController{
 
 	private int defaultTimeoutMs = 0;
 	private int defaultPidIndex = 0;
@@ -309,41 +310,61 @@ public class BobTalonSRX extends TalonSRX implements IBobSmartMotorController{
 
 	@Override
 	public void setPercentOutput(double percentOutput) {
-		super.set(ControlMode.PercentOutput, percentOutput);
+		set(ControlMode.PercentOutput, percentOutput);
+	}
+
+	@Override
+	public void setVelocityOutput(double velocity) {
+		set(ControlMode.Velocity, velocity);
+	}
+
+	@Override
+	public void setPositionOutput(double position) {
+		set(ControlMode.Position, position);
 	}
 
 	@Override
 	public double getPosition() {
-		return this.getPrimarySensorPosition();
+		return getSelectedSensorPosition();
 	}
 
 	@Override
 	public double getVelocity() {
-		return this.getPrimarySensorVelocity();
-	}
-
-	@Override
-	public void resetToFactoryDefaults() {
-		super.configFactoryDefault();
-	}
-
-	@Override
-	public void follow(IBobSmartMotorController leader) {
-		super.follow((TalonSRX) leader);
-	}
-
-	@Override
-	public void setPosition(double position) {
-		super.setSelectedSensorPosition((int) position);
+		return getSelectedSensorVelocity();
 	}
 
 	@Override
 	public double getOutputVoltage() {
-		return super.getMotorOutputVoltage();
+		return getMotorOutputVoltage();
+	}
+
+	@Override
+	public void resetToFactoryDefaults() {
+		configFactoryDefault();
+	}
+
+	@Override
+	public void follow(BobSmartMotorController leader) {
+		follow((IMotorController) leader);
+
+	}
+
+	@Override
+	public void setSensorPosition(double position) {
+		setSelectedSensorPosition((int)position);
 	}
 
 	@Override
 	public void setBrakeMode(boolean brakeModeEnabled) {
-		super.setNeutralMode(brakeModeEnabled ? NeutralMode.Brake : NeutralMode.Coast);
+		if (brakeModeEnabled) {
+			setNeutralMode(NeutralMode.Brake);
+		} else {
+			setNeutralMode(NeutralMode.Coast);
+		}
 	}
+
+	@Override
+    public boolean isControllerPresent() {
+        return getFirmwareVersion() != 0;
+    }
 }

@@ -2,7 +2,7 @@ package com.team319.models;
 
 import com.revrobotics.CANSparkMax;
 
-public class BobSparkMax extends CANSparkMax implements IBobSmartMotorController {
+public class BobSparkMax extends CANSparkMax implements BobSmartMotorController {
 
     public BobSparkMax(int deviceId, MotorType motorType) {
         super(deviceId, motorType);
@@ -10,7 +10,17 @@ public class BobSparkMax extends CANSparkMax implements IBobSmartMotorController
 
     @Override
     public void setPercentOutput(double percentOutput) {
-        super.set(percentOutput);
+        set(percentOutput);
+    }
+
+    @Override
+    public void setVelocityOutput(double velocity) {
+        
+    }
+
+    @Override
+    public void setPositionOutput(double position) {
+
     }
 
     @Override
@@ -29,12 +39,12 @@ public class BobSparkMax extends CANSparkMax implements IBobSmartMotorController
     }
 
     @Override
-    public void follow(IBobSmartMotorController leader) {
+    public void follow(BobSmartMotorController leader) {
         super.follow((CANSparkMax) leader);
     }
 
     @Override
-    public void setPosition(double position) {
+    public void setSensorPosition(double position) {
         super.getEncoder().setPosition(position);
     }
 
@@ -46,5 +56,10 @@ public class BobSparkMax extends CANSparkMax implements IBobSmartMotorController
     @Override
     public void setBrakeMode(boolean brakeModeEnabled) {
         super.setIdleMode(brakeModeEnabled ? IdleMode.kBrake : IdleMode.kCoast);
+    }
+
+    @Override
+    public boolean isControllerPresent() {
+        return getFirmwareVersion() != 0;
     }
 }

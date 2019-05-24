@@ -7,41 +7,43 @@
 
 package com.team2363.utilities;
 
-import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.team2363.logger.HelixEvents;
+import com.team319.models.BobSmartMotorController;
 import com.team319.models.BobSparkMax;
 import com.team319.models.BobTalonSRX;
 import com.team319.models.BobVictorSPX;
 
-/**
- * Add your docs here.
- */
 public class MotorControllerFactory {
 
     public enum MotorControllerType {
-        Talon, Victor, Auto;
+        Talon, Victor, SparkMax;
     }
 
-    public BaseMotorController getCtreController(MotorControllerType type, int channel) {
+    public static BobSmartMotorController getController(int channel) {
+        for (MotorControllerType type : MotorControllerType.values()) {
+            BobSmartMotorController controller = getByType(type, channel);
+            if (controller.isControllerPresent()) {
+                HelixEvents.getInstance().addEvent("START_UP", "Found a " + type + " on channel " + channel);
+                return controller;
+            }
+        }
+        HelixEvents.getInstance().addEvent("START_UP", "Could not find a motor controller on channel " + channel);
+        return null;
+    }
+    
+
+    private static BobSmartMotorController getByType(MotorControllerType type, int channel) {
         switch(type) {
             case Talon:
                 return getTalon(channel);
             case Victor:
                 return getVictor(channel);
+            case SparkMax:
+                return getSparkMax(channel, MotorType.kBrushless);
             default:
-                return getAuto(channel);
-
+                return null;
         }
-    }
-
-    private BaseMotorController getAuto(int channel) {
-        BaseMotorController controller = getTalon(channel);
-        if (controller.getFirmwareVersion() != 0) {
-            return controller;
-        }
-
-        controller = getVictor(channel);
-        return controller;
     }
 
     public static BobTalonSRX getTalon(int channel) {

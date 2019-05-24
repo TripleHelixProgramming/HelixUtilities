@@ -2,10 +2,13 @@ package com.team319.models;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.ParamEnum;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.IMotorController;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-public class BobVictorSPX extends VictorSPX {
+public class BobVictorSPX extends VictorSPX implements BobSmartMotorController{
 
 	private static final int DEFAULT_TIMEOUT_MS = 0;
 
@@ -103,4 +106,67 @@ public class BobVictorSPX extends VictorSPX {
 		return super.configGetParameter(param, ordinal, DEFAULT_TIMEOUT_MS);
 	}
 
+	@Override
+	public void setPercentOutput(double percentOutput) {
+		set(ControlMode.PercentOutput, percentOutput);
+	}
+
+	@Override
+	public void setVelocityOutput(double velocity) {
+		set(ControlMode.Velocity, velocity);
+	}
+
+	@Override
+	public void setPositionOutput(double position) {
+		set(ControlMode.Position, position);
+	}
+
+	@Override
+	public double getPosition() {
+		return getSelectedSensorPosition();
+	}
+
+	@Override
+	public double getVelocity() {
+		return getSelectedSensorVelocity();
+	}
+
+	@Override
+	public double getOutputVoltage() {
+		return getMotorOutputVoltage();
+	}
+
+	@Override
+	public double getOutputCurrent() {
+		return super.getOutputCurrent();
+	}
+
+	@Override
+	public void resetToFactoryDefaults() {
+		configFactoryDefault();
+	}
+
+	@Override
+	public void follow(BobSmartMotorController leader) {
+		follow((IMotorController) leader);
+	}
+
+	@Override
+	public void setSensorPosition(double position) {
+		setSelectedSensorPosition((int)position);
+	}
+
+	@Override
+	public void setBrakeMode(boolean brakeModeEnabled) {
+		if (brakeModeEnabled) {
+			setNeutralMode(NeutralMode.Brake);
+		} else {
+			setNeutralMode(NeutralMode.Coast);
+		}
+	}
+
+	@Override
+    public boolean isControllerPresent() {
+        return getFirmwareVersion() != 0;
+    }
 }
