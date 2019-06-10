@@ -7,7 +7,6 @@
 
 package com.team2363.utilities;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2363.logger.HelixEvents;
 import com.team319.models.BobSmartMotorController;
 import com.team319.models.BobTalonSRX;
