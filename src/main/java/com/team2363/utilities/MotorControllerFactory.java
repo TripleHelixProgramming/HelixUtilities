@@ -10,7 +10,6 @@ package com.team2363.utilities;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2363.logger.HelixEvents;
 import com.team319.models.BobSmartMotorController;
-import com.team319.models.BobSparkMax;
 import com.team319.models.BobTalonSRX;
 import com.team319.models.BobVictorSPX;
 
@@ -39,8 +38,6 @@ public class MotorControllerFactory {
                 return getTalon(channel);
             case Victor:
                 return getVictor(channel);
-            case SparkMax:
-                return getSparkMax(channel, MotorType.kBrushless);
             default:
                 return null;
         }
@@ -52,9 +49,5 @@ public class MotorControllerFactory {
 
     public static BobVictorSPX getVictor(int channel) {
         return new BobVictorSPX(channel);
-    }
-
-    public static BobSparkMax getSparkMax(int channel, MotorType type) {
-        return new BobSparkMax(channel, type);
     }
 }
