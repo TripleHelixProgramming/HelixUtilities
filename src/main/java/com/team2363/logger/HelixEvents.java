@@ -36,13 +36,14 @@ public class HelixEvents {
 	}
 	
 	public void addEvent(String subsystem, String event) {
-		events.add(
-				new StringBuilder()
-				.append(Instant.now().toString()).append("\t")
-				.append(DriverStation.getInstance().getMatchTime()).append("\t")
-				.append("(").append(subsystem).append(")").append("\t")
-				.append(event).append("\n")
-				.toString());
+		String log = new StringBuilder()
+			.append(Instant.now().toString()).append("\t")
+			.append(DriverStation.getInstance().getMatchTime()).append("\t")
+			.append("(").append(subsystem).append(")").append("\t")
+			.append(event).append("\n")
+			.toString();
+		events.add(log);
+		System.out.print(log);
 	}
 	
 	private static void createLogDirectory() throws IOException {
