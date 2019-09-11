@@ -20,6 +20,8 @@ public abstract class PathFollower extends Command {
   private Trajectory leftTrajectory;
   private Trajectory rightTrajectory;
   private boolean flip;
+  private boolean backwards;
+
 
   private int currentSegment;
   private boolean isFinished;
@@ -33,10 +35,31 @@ public abstract class PathFollower extends Command {
     this(pathName, false);
   }
 
+  /**
+   * This will import the path files based on the name of the path provided and if flip is true will swap the two sides of the path so it 
+   * turns in the opposite direction
+   * 
+   * @param pathName the name of the path to run
+   * @param flip should the two sides be flipped
+   */
   public PathFollower(String pathName, boolean flip) {
+    this(pathName, flip, false);
+  }
+
+  /**
+   * This will import the path files based on the name of the path provided
+   * If flip is true will swap the two sides of the path so it turns in the opposite direction 
+   * If backwards is true then the robot will run in the opposite direction
+   * 
+   * @param pathName the name of the path to run
+   * @param flip should the two sides be flipped
+   * @param backwards
+   */
+  public PathFollower(String pathName, boolean flip, boolean backwards) {
     requires(getRequiredSubsystem());
-    this.flip = !flip;
-    importPath(pathName, !flip);
+    this.flip = flip;
+    this.backwards = backwards;
+    importPath(pathName, flip);
   }
 
   public abstract Subsystem getRequiredSubsystem();
@@ -91,7 +114,7 @@ public abstract class PathFollower extends Command {
 
   private void importPath(String pathName, boolean flip) {
     try {
-      if (flip) {
+      if (flip || backwards) {
         leftTrajectory = PathfinderFRC.getTrajectory(pathName + ".right");
         rightTrajectory = PathfinderFRC.getTrajectory(pathName + ".left");
       } else {
@@ -126,6 +149,11 @@ public abstract class PathFollower extends Command {
     // Get our expected velocities based on the paths
     double leftVelocity = leftTrajectory.get(segment).velocity;
     double rightVelocity = rightTrajectory.get(segment).velocity;
+
+    if (backwards) {
+      leftVelocity = -leftVelocity;
+      rightVelocity = -rightVelocity;
+    }
 
     // Set our expected position to be the setpoint of our distance controller
     // The position will be an average of both the left and right to give us the overall distance
