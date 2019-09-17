@@ -19,7 +19,7 @@ public abstract class PathFollower extends Command {
 
   // The trajectories to follow for each side
   private TrajectoryHolder trajectory;
-  private boolean flip;
+  private boolean mirror;
   private boolean inReverse;
 
   private int currentSegment;
@@ -47,8 +47,8 @@ public abstract class PathFollower extends Command {
    * A decorator to flip the left and right direction of the path
    * @return the current PathFollower instance
    */
-  public PathFollower flip() {
-    flip = true;
+  public PathFollower mirror() {
+    mirror = true;
     return this;
   }
 
@@ -161,8 +161,8 @@ public abstract class PathFollower extends Command {
     }
 
     // Get our expected velocities based on the paths
-    double leftVelocity = trajectory.getValue(segment, flip || inReverse ? RIGHT_VELOCITY : LEFT_VELOCITY);
-    double rightVelocity = trajectory.getValue(segment, flip || inReverse ? LEFT_VELOCITY : RIGHT_VELOCITY);
+    double leftVelocity = trajectory.getValue(segment, mirror || inReverse ? RIGHT_VELOCITY : LEFT_VELOCITY);
+    double rightVelocity = trajectory.getValue(segment, mirror || inReverse ? LEFT_VELOCITY : RIGHT_VELOCITY);
 
     if (inReverse) {
       leftVelocity = -leftVelocity;
@@ -178,7 +178,7 @@ public abstract class PathFollower extends Command {
     // Set our expected heading to be the setpoint of our direction controller
     double expectedHeading = trajectory.getValue(segment, HEADING);
     // If the path is flipped, invert the sign of the heading
-    getHeadingController().setReference(flip ? -expectedHeading : expectedHeading);
+    getHeadingController().setReference(mirror ? -expectedHeading : expectedHeading);
     double currentHeading = getCurrentHeading();
 
     // The final velocity is going to be a combination of our expected velocity corrected by our distance error and our heading error
