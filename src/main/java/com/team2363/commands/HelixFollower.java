@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public abstract class PathFollower extends Command {
+public abstract class HelixFollower extends Command {
   private Notifier pathNotifier = new Notifier(this::moveToNextSegment);
   private Notifier pidNotifier = new Notifier(this::calculateOutputs);
 
@@ -30,7 +30,7 @@ public abstract class PathFollower extends Command {
    * 
    * @param path the name of the path to run
    */
-  public PathFollower(String path) {
+  public HelixFollower(String path) {
     trajectory = new FileHolder(path);
   }
 
@@ -39,7 +39,7 @@ public abstract class PathFollower extends Command {
    * 
    * @param path the name of the path to run
    */
-  public PathFollower(Path path) {
+  public HelixFollower(Path path) {
     trajectory = new PathHolder(path);
   }
 
@@ -47,7 +47,7 @@ public abstract class PathFollower extends Command {
    * A decorator to flip the left and right direction of the path
    * @return the current PathFollower instance
    */
-  public PathFollower mirror() {
+  public HelixFollower mirror() {
     mirror = true;
     return this;
   }
@@ -56,7 +56,7 @@ public abstract class PathFollower extends Command {
    * A decorator to run the path with the robot facing backwards
    * @return the current PathFollower instance
    */
-  public PathFollower inReverse() {
+  public HelixFollower inReverse() {
     inReverse = true;
     return this;
   }
