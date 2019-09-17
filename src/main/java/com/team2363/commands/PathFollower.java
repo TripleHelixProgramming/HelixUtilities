@@ -1,26 +1,26 @@
 package com.team2363.commands;
 
-import java.io.IOException;
+import static com.team319.trajectory.Path.SegmentValue.CENTER_POSITION;
+import static com.team319.trajectory.Path.SegmentValue.HEADING;
+import static com.team319.trajectory.Path.SegmentValue.LEFT_VELOCITY;
+import static com.team319.trajectory.Path.SegmentValue.RIGHT_VELOCITY;
 
 import com.team2363.controller.PIDController;
-import com.team2363.logger.HelixEvents;
+import com.team319.trajectory.Path;
+import com.team319.trajectory.Path.SegmentValue;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.PathfinderFRC;
-import jaci.pathfinder.Trajectory;
 
 public abstract class PathFollower extends Command {
   private Notifier pathNotifier = new Notifier(this::moveToNextSegment);
   private Notifier pidNotifier = new Notifier(this::calculateOutputs);
 
   // The trajectories to follow for each side
-  private Trajectory leftTrajectory;
-  private Trajectory rightTrajectory;
+  private TrajectoryHolder trajectory;
   private boolean flip;
-  private boolean backwards;
-
+  private boolean inReverse;
 
   private int currentSegment;
   private boolean isFinished;
@@ -28,36 +28,37 @@ public abstract class PathFollower extends Command {
   /**
    * This will import the path files based on the name of the path provided
    * 
-   * @param pathName the name of the path to run
+   * @param path the name of the path to run
    */
-  public PathFollower(String pathName) {
-    this(pathName, false);
+  public PathFollower(String path) {
+    trajectory = new FileHolder(path);
   }
 
   /**
-   * This will import the path files based on the name of the path provided and if flip is true will swap the two sides of the path so it 
-   * turns in the opposite direction
+   * This will import the path class based on the name of the path provided
    * 
-   * @param pathName the name of the path to run
-   * @param flip should the two sides be flipped
+   * @param path the name of the path to run
    */
-  public PathFollower(String pathName, boolean flip) {
-    this(pathName, flip, false);
+  public PathFollower(Path path) {
+    trajectory = new PathHolder(path);
   }
 
   /**
-   * This will import the path files based on the name of the path provided
-   * If flip is true will swap the two sides of the path so it turns in the opposite direction 
-   * If backwards is true then the robot will run in the opposite direction
-   * 
-   * @param pathName the name of the path to run
-   * @param flip should the two sides be flipped
-   * @param backwards
+   * A decorator to flip the left and right direction of the path
+   * @return the current PathFollower instance
    */
-  public PathFollower(String pathName, boolean flip, boolean backwards) {
-    this.flip = flip;
-    this.backwards = backwards;
-    importPath(pathName, flip);
+  public PathFollower flip() {
+    flip = true;
+    return this;
+  }
+
+  /**
+   * A decorator to run the path with the robot facing backwards
+   * @return the current PathFollower instance
+   */
+  public PathFollower inReverse() {
+    inReverse = true;
+    return this;
   }
 
   /**
@@ -113,14 +114,8 @@ public abstract class PathFollower extends Command {
     isFinished = false;
 
     // Start running the path
-    pathNotifier.startPeriodic(leftTrajectory.get(0).dt);
+    pathNotifier.startPeriodic(trajectory.getValue(0, SegmentValue.TIME_STAMP));
     pidNotifier.startPeriodic(getDistanceController().getPeriod());
-
-    // If there  was an issue with importing the paths then we should just finish this command instantly
-    if (leftTrajectory == null || rightTrajectory == null) {
-      HelixEvents.getInstance().addEvent("DRIVETRAIN", "There was an issue importing the path, ending the command instantly.");
-      isFinished = true;
-    }
   }
 
   @Override
@@ -145,27 +140,13 @@ public abstract class PathFollower extends Command {
     end();
   }
 
-  private void importPath(String pathName, boolean flip) {
-    try {
-      if (flip || backwards) {
-        leftTrajectory = PathfinderFRC.getTrajectory(pathName + ".right");
-        rightTrajectory = PathfinderFRC.getTrajectory(pathName + ".left");
-      } else {
-        leftTrajectory = PathfinderFRC.getTrajectory(pathName + ".left");
-        rightTrajectory = PathfinderFRC.getTrajectory(pathName + ".right");
-      }
-
-    } catch (IOException e) {
-		  e.printStackTrace();
-	  }
-  }
 
   private void moveToNextSegment() {
     // Move to the next segment in the path
     currentSegment++;
 
     // Was that the last segment in our path?
-    if (currentSegment >= leftTrajectory.length()) {
+    if (currentSegment >= trajectory.getSegmentCount()) {
       isFinished = true;
     }
   }
@@ -175,27 +156,27 @@ public abstract class PathFollower extends Command {
     // of the calculations
     int segment = currentSegment;
     // If we're finished there are no more segments to read from and we should return
-    if (segment >= leftTrajectory.length()) {
+    if (segment >= trajectory.getSegmentCount()) {
       return;
     }
 
     // Get our expected velocities based on the paths
-    double leftVelocity = leftTrajectory.get(segment).velocity;
-    double rightVelocity = rightTrajectory.get(segment).velocity;
+    double leftVelocity = trajectory.getValue(segment, flip || inReverse ? RIGHT_VELOCITY : LEFT_VELOCITY);
+    double rightVelocity = trajectory.getValue(segment, flip || inReverse ? LEFT_VELOCITY : RIGHT_VELOCITY);
 
-    if (backwards) {
+    if (inReverse) {
       leftVelocity = -leftVelocity;
       rightVelocity = -rightVelocity;
     }
 
     // Set our expected position to be the setpoint of our distance controller
     // The position will be an average of both the left and right to give us the overall distance
-    double expectedPosition = (leftTrajectory.get(segment).position + rightTrajectory.get(segment).position) / 2.0;
+    double expectedPosition = trajectory.getValue(segment, CENTER_POSITION);
     getDistanceController().setReference(expectedPosition);
     double currentPosition = getCurrentDistance();
 
     // Set our expected heading to be the setpoint of our direction controller
-    double expectedHeading = leftTrajectory.get(segment).heading;
+    double expectedHeading = trajectory.getValue(segment, HEADING);
     // If the path is flipped, invert the sign of the heading
     getHeadingController().setReference(flip ? -expectedHeading : expectedHeading);
     double currentHeading = getCurrentHeading();
