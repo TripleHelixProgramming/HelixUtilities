@@ -7,7 +7,7 @@ import com.team319.trajectory.Path.SegmentValue;
 import jaci.pathfinder.PathfinderFRC;
 import jaci.pathfinder.Trajectory;
 
-public class FileHolder implements TrajectoryHolder {
+class FileHolder implements TrajectoryHolder {
 
     private Trajectory leftTrajectory;
     private Trajectory centerTrajectory;
