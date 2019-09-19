@@ -81,7 +81,7 @@ public class HelixLogger {
 		dataSources.add(new LogSource(name, supplier.get()::toString));
 	}
 
-	public void adFloatSource(String name, Supplier<Float> supplier) {
+	public void addFloatSource(String name, Supplier<Float> supplier) {
 		dataSources.add(new LogSource(name, supplier.get()::toString));
 	}
 
