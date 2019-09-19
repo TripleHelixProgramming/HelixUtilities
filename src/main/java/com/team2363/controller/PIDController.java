@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
  * and derivative calculations. Therefore, the sample rate affects the controller's behavior for a
  * given set of PID constants.
  */
-@SuppressWarnings("PMD.TooManyFields")
 public class PIDController implements Sendable, AutoCloseable {
   private String m_name = "";
   private String m_subsystem = "Ungrouped";
@@ -30,15 +29,12 @@ public class PIDController implements Sendable, AutoCloseable {
   private static int instances;
 
   // Factor for "proportional" control
-  @SuppressWarnings("MemberName")
   private double m_Kp;
 
   // Factor for "integral" control
-  @SuppressWarnings("MemberName")
   private double m_Ki;
 
   // Factor for "derivative" control
-  @SuppressWarnings("MemberName")
   private double m_Kd;
 
   // The period (in seconds) of the loop that calls the controller
@@ -92,7 +88,6 @@ public class PIDController implements Sendable, AutoCloseable {
    * @param Ki The integral coefficient.
    * @param Kd The derivative coefficient.
    */
-  @SuppressWarnings("ParameterName")
   public PIDController(double Kp, double Ki, double Kd) {
     this(Kp, Ki, Kd, 0.02);
   }
@@ -105,7 +100,6 @@ public class PIDController implements Sendable, AutoCloseable {
    * @param Kd     The derivative coefficient.
    * @param period The period between controller updates in seconds. The default is 5ms.
    */
-  @SuppressWarnings("ParameterName")
   public PIDController(double Kp, double Ki, double Kd, double period) {
     m_Kp = Kp;
     m_Ki = Ki;
@@ -127,7 +121,6 @@ public class PIDController implements Sendable, AutoCloseable {
    * @param Ki Integral coefficient
    * @param Kd Differential coefficient
    */
-  @SuppressWarnings("ParameterName")
   public void setPID(double Kp, double Ki, double Kd) {
     m_thisMutex.lock();
     try {
@@ -144,7 +137,6 @@ public class PIDController implements Sendable, AutoCloseable {
    *
    * @param Kp proportional coefficient
    */
-  @SuppressWarnings("ParameterName")
   public void setP(double Kp) {
     m_thisMutex.lock();
     try {
@@ -159,7 +151,6 @@ public class PIDController implements Sendable, AutoCloseable {
    *
    * @param Ki integral coefficient
    */
-  @SuppressWarnings("ParameterName")
   public void setI(double Ki) {
     m_thisMutex.lock();
     try {
@@ -174,7 +165,6 @@ public class PIDController implements Sendable, AutoCloseable {
    *
    * @param Kd differential coefficient
    */
-  @SuppressWarnings("ParameterName")
   public void setD(double Kd) {
     m_thisMutex.lock();
     try {
@@ -474,7 +464,6 @@ public class PIDController implements Sendable, AutoCloseable {
    * @param measurement The current measurement of the process variable.
    * @return The controller output.
    */
-  @SuppressWarnings("LocalVariableName")
   public double calculate(double measurement) {
     // Storage for function inputs
     final double Kp;

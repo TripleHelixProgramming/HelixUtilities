@@ -3,7 +3,7 @@ package com.team2363.commands;
 import com.team319.trajectory.Path;
 import com.team319.trajectory.Path.SegmentValue;
 
-public class PathHolder implements TrajectoryHolder {
+class PathHolder implements TrajectoryHolder {
     
     private Path path;
 
