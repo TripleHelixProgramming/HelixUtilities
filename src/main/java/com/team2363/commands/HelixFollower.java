@@ -20,7 +20,7 @@ public abstract class HelixFollower extends Command {
   // The trajectories to follow for each side
   private TrajectoryHolder trajectory;
   private boolean mirror;
-  private boolean inReverse;
+  private boolean reverse;
 
   private int currentSegment;
   private boolean isFinished;
@@ -56,8 +56,8 @@ public abstract class HelixFollower extends Command {
    * A decorator to run the path with the robot facing backwards
    * @return the current PathFollower instance
    */
-  public HelixFollower inReverse() {
-    inReverse = true;
+  public HelixFollower reverse() {
+    reverse = true;
     return this;
   }
 
@@ -161,10 +161,10 @@ public abstract class HelixFollower extends Command {
     }
 
     // Get our expected velocities based on the paths
-    double leftVelocity = trajectory.getValue(segment, mirror || inReverse ? RIGHT_VELOCITY : LEFT_VELOCITY);
-    double rightVelocity = trajectory.getValue(segment, mirror || inReverse ? LEFT_VELOCITY : RIGHT_VELOCITY);
+    double leftVelocity = trajectory.getValue(segment, mirror ^ reverse ? RIGHT_VELOCITY : LEFT_VELOCITY);
+    double rightVelocity = trajectory.getValue(segment, mirror ^ reverse ? LEFT_VELOCITY : RIGHT_VELOCITY);
 
-    if (inReverse) {
+    if (reverse) {
       leftVelocity = -leftVelocity;
       rightVelocity = -rightVelocity;
     }
@@ -172,7 +172,7 @@ public abstract class HelixFollower extends Command {
     // Set our expected position to be the setpoint of our distance controller
     // The position will be an average of both the left and right to give us the overall distance
     double expectedPosition = trajectory.getValue(segment, CENTER_POSITION);
-    getDistanceController().setReference(expectedPosition);
+    getDistanceController().setReference(reverse ? -expectedPosition : expectedPosition);
     double currentPosition = getCurrentDistance();
 
     // Set our expected heading to be the setpoint of our direction controller

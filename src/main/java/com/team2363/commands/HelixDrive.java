@@ -4,8 +4,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-import com.team2363.logger.HelixEvents;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 public abstract class HelixDrive extends Command {
