@@ -6,6 +6,7 @@ import static com.team319.trajectory.Path.SegmentValue.LEFT_VELOCITY;
 import static com.team319.trajectory.Path.SegmentValue.RIGHT_VELOCITY;
 
 import com.team2363.controller.PIDController;
+import com.team2363.logger.HelixEvents;
 import com.team319.trajectory.Path;
 import com.team319.trajectory.Path.SegmentValue;
 
@@ -18,7 +19,7 @@ public abstract class HelixFollower extends Command {
   private Notifier pidNotifier = new Notifier(this::calculateOutputs);
 
   // The trajectories to follow for each side
-  private TrajectoryHolder trajectory;
+  private Path trajectory;
   private boolean mirror;
   private boolean reverse;
 
@@ -26,21 +27,12 @@ public abstract class HelixFollower extends Command {
   private boolean isFinished;
 
   /**
-   * This will import the path files based on the name of the path provided
-   * 
-   * @param path the name of the path to run
-   */
-  public HelixFollower(String path) {
-    trajectory = new FileHolder(path);
-  }
-
-  /**
    * This will import the path class based on the name of the path provided
    * 
    * @param path the name of the path to run
    */
   public HelixFollower(Path path) {
-    trajectory = new PathHolder(path);
+    trajectory = path;
   }
 
   /**
@@ -116,6 +108,8 @@ public abstract class HelixFollower extends Command {
     // Start running the path
     pathNotifier.startPeriodic(trajectory.getValue(0, SegmentValue.TIME_STAMP));
     pidNotifier.startPeriodic(getDistanceController().getPeriod());
+
+    HelixEvents.getInstance().addEvent("HelixFollower", "Starting path: " + trajectory.getClass().getSimpleName());
   }
 
   @Override
@@ -133,6 +127,7 @@ public abstract class HelixFollower extends Command {
   protected void end() {
     pathNotifier.stop();
     pidNotifier.stop();
+    HelixEvents.getInstance().addEvent("HelixFollower", "Finished path: " + trajectory.getClass().getSimpleName());
   }
 
   @Override
