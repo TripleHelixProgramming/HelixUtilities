@@ -12,7 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 /**
@@ -567,9 +566,7 @@ public class PIDController implements Sendable, AutoCloseable {
   }
 
   @Override
-  public void close() {
-    LiveWindow.remove(this);
-  }
+  public void close() { }
 
   protected ReentrantLock m_thisMutex = new ReentrantLock();
 
