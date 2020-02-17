@@ -74,39 +74,7 @@ public class HelixLogger {
 	}
 
 	public void addSource(String name, Supplier<Object> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
-	}
-
-	public void addDoubleSource(String name, Supplier<Double> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
-	}
-
-	public void addFloatSource(String name, Supplier<Float> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
-	}
-
-	public void addShortSource(String name, Supplier<Short> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
-	}
-
-	public void addIntegerSource(String name, Supplier<Integer> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
-	}
-
-	public void addLongSource(String name, Supplier<Long> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
-	}
-
-	public void addBooleanSource(String name, Supplier<Boolean> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
-	}
-
-	public void addStringSource(String name, Supplier<String> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
-	}
-
-	public void addCharacterSource(String name, Supplier<Character> supplier) {
-		dataSources.add(new LogSource(name, supplier.get()::toString));
+		dataSources.add(new LogSource(name, supplier));
 	}
 
 	public void saveLogs() {
@@ -134,14 +102,14 @@ public class HelixLogger {
 	}
 
 	private String getValues() {
-		return dataSources.stream().map(s -> s.supplier.get()).collect(Collectors.joining(","));
+		return dataSources.stream().map(s -> s.supplier.get()).map(Object::toString).collect(Collectors.joining(","));
 	}
 
 	private class LogSource {
 		private final String name;
-		private final Supplier<String> supplier;
+		private final Supplier<Object> supplier;
 
-		public LogSource(String name, Supplier<String> supplier) {
+		public LogSource(String name, Supplier<Object> supplier) {
 			this.name = name;
 			this.supplier = supplier;
 		}
