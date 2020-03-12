@@ -5,13 +5,14 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package com.team2363.commands;
+package com.team2363.commands.old;
 
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 
+@Deprecated
 public class HelixConditionalCommand extends ConditionalCommand {
 
   Supplier<Boolean> condition;

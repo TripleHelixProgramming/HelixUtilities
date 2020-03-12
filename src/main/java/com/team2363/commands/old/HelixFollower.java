@@ -1,4 +1,4 @@
-package com.team2363.commands;
+package com.team2363.commands.old;
 
 import static com.team319.trajectory.Path.SegmentValue.CENTER_POSITION;
 import static com.team319.trajectory.Path.SegmentValue.HEADING;
@@ -11,10 +11,11 @@ import com.team319.trajectory.Path;
 import com.team319.trajectory.Path.SegmentValue;
 
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public abstract class HelixFollower extends CommandBase {
+@Deprecated
+public abstract class HelixFollower extends Command {
   private Notifier pathNotifier = new Notifier(this::moveToNextSegment);
   private Notifier pidNotifier = new Notifier(this::calculateOutputs);
 
@@ -97,7 +98,7 @@ public abstract class HelixFollower extends CommandBase {
   public abstract void useOutputs(double left, double right);
 
   @Override
-  public void initialize() {
+  protected void initialize() {
     resetDistance();
     //Make sure we're starting at the beginning of the path
     getDistanceController().reset();
@@ -113,21 +114,26 @@ public abstract class HelixFollower extends CommandBase {
   }
 
   @Override
-  public void execute() {
+  protected void execute() {
     SmartDashboard.putNumber("Distance Path Error", getDistanceController().getError());
     SmartDashboard.putNumber("Heading Path Error", getHeadingController().getError());
   }
 
   @Override
-  public boolean isFinished() {
+  protected boolean isFinished() {
     return isFinished;
   }
 
   @Override
-  public void end(boolean interrupted) {
+  protected void end() {
     pathNotifier.stop();
     pidNotifier.stop();
     HelixEvents.getInstance().addEvent("HelixFollower", "Finished path: " + trajectory.getClass().getSimpleName());
+  }
+
+  @Override
+  protected void interrupted() {
+    end();
   }
 
 

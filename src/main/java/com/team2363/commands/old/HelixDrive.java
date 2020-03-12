@@ -1,13 +1,13 @@
-package com.team2363.commands;
+package com.team2363.commands.old;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.command.Command;
 
-
-public abstract class HelixDrive extends CommandBase {
+@Deprecated
+public abstract class HelixDrive extends Command {
 	
 	/**
 	 * Provides the throttle value [-1, 1] for the arcade calculations.
@@ -29,7 +29,7 @@ public abstract class HelixDrive extends CommandBase {
 	protected abstract void useOutputs(double left, double right);
 
 	@Override
-    public void execute() {
+    protected void execute() {
     	//read in joystick values from OI
     	//range [-1, 1]
     	double throttleInput = getThrottle();
@@ -61,9 +61,8 @@ public abstract class HelixDrive extends CommandBase {
 	    useOutputs(left, right);
     }
 
-	// Make this return true when this Command no longer needs to run execute()
-	@Override
-    public boolean isFinished() {
+    // Make this return true when this Command no longer needs to run execute()
+    protected boolean isFinished() {
         return false;
     }
 }

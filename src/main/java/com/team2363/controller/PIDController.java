@@ -567,9 +567,7 @@ public class PIDController implements Sendable, AutoCloseable {
   }
 
   @Override
-  public void close() {
-    LiveWindow.remove(this);
-  }
+  public void close() { }
 
   protected ReentrantLock m_thisMutex = new ReentrantLock();
 
