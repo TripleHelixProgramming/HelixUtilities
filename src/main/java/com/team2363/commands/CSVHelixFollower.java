@@ -25,7 +25,6 @@ public abstract class CSVHelixFollower extends Command {
 
   public enum INDEX {
 
-    // VALUES ARE WRONG - Need to set these to actual index for the CSV file
     DT(0),
     LEFT_VELOCITY(4),
     RIGHT_VELOCITY(12),
