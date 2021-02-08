@@ -16,6 +16,7 @@ public abstract class CSVHelixFollower extends Command {
   private Notifier pidNotifier = new Notifier(this::calculateOutputs);
 
   private String filename;
+  private String line = null;
   private boolean mirror, reverse, isFinished;
   private double mCurrentDistance, mTargetDistance;
   private double mCurrentHeading, mTargetHeading; 
@@ -113,16 +114,21 @@ public abstract class CSVHelixFollower extends Command {
 
   private void moveToNextSegment() {
     try {
-      timestamp = pathReader.readLine().split(",");
+      line = pathReader.readLine();
+      if (line == null) {
+        isFinished = true;
+      } else {
+        timestamp = line.split(",");
+        System.out.println(timestamp);
+      }
     } catch (IOException e) {
 
     }
-    if (pathReader == null) isFinished = true;
   }
 
   private void calculateOutputs() {
 
-    if (pathReader == null) return;
+    if (line == null) return;
     
     mCurrentDistance = getCurrentDistance();
     mTargetDistance = reverse ? -getIndex(INDEX.CENTER_POSITION) : getIndex(INDEX.CENTER_POSITION);
@@ -139,8 +145,8 @@ public abstract class CSVHelixFollower extends Command {
     getDistanceController().setReference(mTargetDistance);
     getHeadingController().setReference(mTargetHeading);
 
-    double correctedLeftVelocity = mLeftVelocity + getDistanceController().calculate(mCurrentDistance) - getHeadingController().calculate(mCurrentHeading);
-    double correctedRightVelocity = mRightVelocity + getDistanceController().calculate(mCurrentDistance) + getHeadingController().calculate(mCurrentHeading);
+    // double correctedLeftVelocity = mLeftVelocity + getDistanceController().calculate(mCurrentDistance) - getHeadingController().calculate(mCurrentHeading);
+    // double correctedRightVelocity = mRightVelocity + getDistanceController().calculate(mCurrentDistance) + getHeadingController().calculate(mCurrentHeading);
 
     useOutputs(correctedLeftVelocity, correctedRightVelocity);
   }
