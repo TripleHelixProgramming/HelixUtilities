@@ -119,7 +119,6 @@ public abstract class CSVHelixFollower extends Command {
         isFinished = true;
       } else {
         timestamp = line.split(",");
-        System.out.println(timestamp);
       }
     } catch (IOException e) {
 
@@ -148,7 +147,7 @@ public abstract class CSVHelixFollower extends Command {
     double correctedLeftVelocity = mLeftVelocity + getDistanceController().calculate(mCurrentDistance) - getHeadingController().calculate(mCurrentHeading);
     double correctedRightVelocity = mRightVelocity + getDistanceController().calculate(mCurrentDistance) + getHeadingController().calculate(mCurrentHeading);
 
-    // useOutputs(correctedLeftVelocity, correctedRightVelocity);
+    useOutputs(correctedLeftVelocity, correctedRightVelocity);
   }
 
   public double getIndex(INDEX index) {
