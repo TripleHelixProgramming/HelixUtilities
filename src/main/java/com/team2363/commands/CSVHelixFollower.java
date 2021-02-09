@@ -45,7 +45,7 @@ public abstract class CSVHelixFollower extends Command {
 
   public CSVHelixFollower(String filename) {
     try {
-      this.filename = filename + ".csv";
+      this.filename = /home/lvuser/deploy/paths/" + filename + ".csv";
       pathReader = new BufferedReader(new FileReader(this.filename));
       pathReader.readLine();
     } catch (IOException e) {
