@@ -145,10 +145,10 @@ public abstract class CSVHelixFollower extends Command {
     getDistanceController().setReference(mTargetDistance);
     getHeadingController().setReference(mTargetHeading);
 
-    // double correctedLeftVelocity = mLeftVelocity + getDistanceController().calculate(mCurrentDistance) - getHeadingController().calculate(mCurrentHeading);
-    // double correctedRightVelocity = mRightVelocity + getDistanceController().calculate(mCurrentDistance) + getHeadingController().calculate(mCurrentHeading);
+    double correctedLeftVelocity = mLeftVelocity + getDistanceController().calculate(mCurrentDistance) - getHeadingController().calculate(mCurrentHeading);
+    double correctedRightVelocity = mRightVelocity + getDistanceController().calculate(mCurrentDistance) + getHeadingController().calculate(mCurrentHeading);
 
-    useOutputs(correctedLeftVelocity, correctedRightVelocity);
+    // useOutputs(correctedLeftVelocity, correctedRightVelocity);
   }
 
   public double getIndex(INDEX index) {
