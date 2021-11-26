@@ -39,6 +39,19 @@ public class ControllerPatroller {
         } 
     }
 
+
+    /**
+     * @param name string to look for in list of joystick names
+     * @return Joystick or null
+    */
+    public Optional<Joystick> find(String name) {
+        // Filter the list of controllers for ones that contain the provided name
+        Optional<Joystick> joystick = controllers.stream()
+            .filter(c -> c.getName().toLowerCase().contains(name.toLowerCase()))
+            .findFirst();
+            
+        return joystick;
+    }
     /**
      * @param name the name of the controller to access
      * @param defaultPort the port to access if a controller with the provided name is not found
@@ -47,9 +60,7 @@ public class ControllerPatroller {
      */
     public Joystick get(String name, int defaultPort) {
         // Filter the list of controllers for ones that contain the provided name
-        Optional<Joystick> joystick = controllers.stream()
-            .filter(c -> c.getName().toLowerCase().contains(name.toLowerCase()))
-            .findFirst();
+        Optional<Joystick> joystick = find(name);
 
         if (joystick.isPresent()) {
             return joystick.get();
