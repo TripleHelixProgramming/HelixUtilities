@@ -1,7 +1,7 @@
 package com.team2363.utilities;
-
 public class ControllerMap {
-	//XboxOne Joysticks
+	
+	//XboxOne Joystick Axis
 	public static final int X_BOX_LEFT_STICK_X = 0;
 	public static final int X_BOX_LEFT_STICK_Y = 1;
 	public static final int X_BOX_LEFT_TRIGGER = 2;
@@ -21,7 +21,8 @@ public class ControllerMap {
 	public static final int X_BOX_LEFT_STICK_BUTTON = 9;
 	public static final int X_BOX_RIGHT_STICK_BUTTON = 10;
 
-	//PS4 joystick axis
+
+	//PS4 Joystick Axis
 	public static final int PS4_LEFT_STICK_X = 0;
 	public static final int PS4_LEFT_STICK_Y = 1;
 	public static final int PS4_RIGHT_STICK_X = 2;
@@ -43,5 +44,30 @@ public class ControllerMap {
 	public static final int PS4_L3 = 11;
 	public static final int PS4_R3 = 12;
 	public static final int PS4_PS = 13;
+
+
+	//RadioMaster Joystick Axis
+	public static final int RM_LEFT_STICK_X = 0;
+	public static final int RM_LEFT_STICK_Y = 1;
+	public static final int RM_LEFT_AXIS = 2;
+	public static final int RM_RIGHT_AXIS = 3;
+	public static final int RM_RIGHT_STICK_X = 4;
+	public static final int RM_RIGHT_STICK_Y = 5;
+	
+	// RadioMaster Switches/Buttons
+	public static final int RM_SA_FRONT = 1;
+	public static final int RM_SA_BACK = 2;
+	public static final int RM_SB_FRONT = 3;
+	public static final int RM_SB_BACK = 4;
+	public static final int RM_SC_FRONT = 5;
+	public static final int RM_SC_BACK = 6;
+	public static final int RM_SD_FRONT = 7;
+	public static final int RM_SD_BACK = 8;
+	public static final int RM_SE_DOWN = 9;
+	public static final int RM_SE_UP = 10;
+	public static final int RM_SF = 11;
+	public static final int RM_SG_DOWN = 13;
+	public static final int RM_SG_UP = 14;
+	public static final int RM_SH = 15;
 
 }
