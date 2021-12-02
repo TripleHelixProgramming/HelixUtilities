@@ -39,6 +39,28 @@ public class ControllerPatroller {
         } 
     }
 
+    /**
+     * Detect if the list of controllers connected to USB has changed.
+     * 
+     * If so, update the list of controllers and return TRUE.
+     * 
+     * @return has the list of controllers changed?
+     */
+    public boolean controllersChanged() {
+
+        List<Joystick> curControllers = new ArrayList<>();
+
+        for (int i = 0; i < 6; i++) {
+            curControllers.add(new Joystick(i));
+        } 
+
+        boolean changed = !curControllers.equals(controllers);
+
+        if (changed) {
+            controllers = curControllers;
+        }        
+        return changed;
+    }
 
     /**
      * @param name string to look for in list of joystick names
