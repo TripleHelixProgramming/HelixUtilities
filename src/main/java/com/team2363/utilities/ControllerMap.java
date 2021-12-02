@@ -65,9 +65,9 @@ public class ControllerMap {
 	public static final int RM_SD_BACK = 8;
 	public static final int RM_SE_DOWN = 9;
 	public static final int RM_SE_UP = 10;
-	public static final int RM_SF = 11;
+	public static final int RM_SF = 12;
 	public static final int RM_SG_DOWN = 13;
 	public static final int RM_SG_UP = 14;
-	public static final int RM_SH = 15;
+	public static final int RM_SH = 16;
 
 }
