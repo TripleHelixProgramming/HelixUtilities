@@ -1,10 +1,12 @@
 package com.team2363.utilities;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class will create joysticks for all 6 slots and allow you to retrieve them based on their display name.
@@ -27,6 +29,7 @@ public class ControllerPatroller {
     }
 
     private List<Joystick> controllers = new ArrayList<>();
+    private List<String> controllerNames = new ArrayList<>();
 
     /**
      * @param controllerNames the list of controller names in the order the user would like to access them
@@ -36,6 +39,7 @@ public class ControllerPatroller {
         // Most of these objects will go unused
         for (int i = 0; i < 6; i++) {
             controllers.add(new Joystick(i));
+            controllerNames.add(controllers.get(i).getName());
         } 
     }
 
@@ -48,17 +52,14 @@ public class ControllerPatroller {
      */
     public boolean controllersChanged() {
 
-        List<Joystick> curControllers = new ArrayList<>();
-
+        boolean changed = false;
         for (int i = 0; i < 6; i++) {
-            curControllers.add(new Joystick(i));
-        } 
-
-        boolean changed = !curControllers.equals(controllers);
-
-        if (changed) {
-            controllers = curControllers;
-        }        
+            String controllerName = controllers.get(i).getName();
+            if (!controllerNames.get(i).equals(controllerName)) {
+                changed = true;
+                controllerNames.set(i,controllerName);
+            }
+        }
         return changed;
     }
 
