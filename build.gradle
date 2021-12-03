@@ -44,3 +44,15 @@ dependencies {
 jar {
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
 }
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.github.TripleHelixProgramming'
+            artifactId = 'HelixUtilities'
+            version = '2022-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}
