@@ -46,7 +46,7 @@ public class ControllerMap {
 	public static final int PS4_PS = 13;
 
 
-	//RadioMaster Joystick Axis
+	//RadioMaster TX16S & Zorro Joystick Axis
 	public static final int RM_LEFT_STICK_X = 0;
 	public static final int RM_LEFT_STICK_Y = 1;
 	public static final int RM_LEFT_AXIS = 2;
@@ -54,7 +54,7 @@ public class ControllerMap {
 	public static final int RM_RIGHT_STICK_X = 4;
 	public static final int RM_RIGHT_STICK_Y = 5;
 	
-	// RadioMaster Switches/Buttons
+	// RadioMaster TX16S Switches/Buttons
 	public static final int RM_SA_FRONT = 1;
 	public static final int RM_SA_BACK = 2;
 	public static final int RM_SB_FRONT = 3;
@@ -69,5 +69,25 @@ public class ControllerMap {
 	public static final int RM_SG_DOWN = 13;
 	public static final int RM_SG_UP = 14;
 	public static final int RM_SH = 16;
+
+	// RadioMaster Zorro Switches & Buttons
+	public static final int RMZ_B_DOWN = 1;
+	public static final int RMZ_B_MID = 2;
+	public static final int RMZ_B_UP = 3;
+	public static final int RMZ_E_DOWN = 4;
+	public static final int RMZ_E_UP = 5;
+	public static final int RMZ_A_IN = 6;
+	public static final int RMZ_G_IN = 7;
+	public static final int RMZ_C_DOWN = 8;
+	public static final int RMZ_C_MID = 9;
+	public static final int RMZ_C_UP = 10;
+	public static final int RMZ_F_DOWN = 11;
+	public static final int RMZ_F_UP = 12;
+	public static final int RMZ_D_IN = 13;
+	public static final int RMZ_H_IN = 14;
+
+
+
+
 
 }
