@@ -11,8 +11,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 
 /**
  * Class implements a PID Control Loop.
@@ -535,22 +535,18 @@ public class PIDController implements Sendable, AutoCloseable {
     }
   }
 
-  @Override
   public final synchronized String getName() {
     return m_name;
   }
 
-  @Override
   public final synchronized void setName(String name) {
     m_name = name;
   }
 
-  @Override
   public final synchronized String getSubsystem() {
     return m_subsystem;
   }
 
-  @Override
   public final synchronized void setSubsystem(String subsystem) {
     m_subsystem = subsystem;
   }

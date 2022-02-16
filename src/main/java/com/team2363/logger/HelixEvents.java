@@ -38,7 +38,7 @@ public class HelixEvents {
 	public void addEvent(String subsystem, String event) {
 		String log = new StringBuilder()
 			.append(Instant.now().toString()).append("\t")
-			.append(DriverStation.getInstance().getMatchTime()).append("\t")
+			.append(DriverStation.getMatchTime()).append("\t")
 			.append("(").append(subsystem).append(")").append("\t")
 			.append(event).append("\n")
 			.toString();
@@ -57,11 +57,11 @@ public class HelixEvents {
 		Writer output = null;
 		try {
 			createLogDirectory();
-			if (DriverStation.getInstance().isFMSAttached()) {
+			if (DriverStation.isFMSAttached()) {
 				file = Paths.get(loggingLocation + 
-						DriverStation.getInstance().getEventName() + "_"+ 
-						DriverStation.getInstance().getMatchType() + 
-						DriverStation.getInstance().getMatchNumber() + "Events.txt");
+						DriverStation.getEventName() + "_"+ 
+						DriverStation.getMatchType() + 
+						DriverStation.getMatchNumber() + "Events.txt");
 			} else {
 				file = Paths.get(loggingLocation + "testEvents.txt");
 			}

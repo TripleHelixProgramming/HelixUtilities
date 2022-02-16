@@ -29,7 +29,6 @@ public class Instrum {
 			/* print the Active Trajectory Point Motion Magic is servoing towards */
 			SmartDashboard.putNumber("ActTrajVelocity", tal.getActiveTrajectoryVelocity());
 			SmartDashboard.putNumber("ActTrajPosition", tal.getActiveTrajectoryPosition());
-			SmartDashboard.putNumber("ActTrajHeading", tal.getActiveTrajectoryHeading());
 		}
 		/* periodically print to console */
 		if (++_loops >= 10) {

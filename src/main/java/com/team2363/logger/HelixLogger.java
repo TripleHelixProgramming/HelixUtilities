@@ -49,11 +49,11 @@ public class HelixLogger {
 		Writer output = null;
 		try {
 			createLogDirectory();
-			if (DriverStation.getInstance().isFMSAttached()) {
+			if (DriverStation.isFMSAttached()) {
 				file = Paths.get(loggingLocation + 
-						DriverStation.getInstance().getEventName() + "_"+ 
-						DriverStation.getInstance().getMatchType() + 
-						DriverStation.getInstance().getMatchNumber() + ".csv");
+						DriverStation.getEventName() + "_"+ 
+						DriverStation.getMatchType() + 
+						DriverStation.getMatchNumber() + ".csv");
 			} else {
 				file = Paths.get(loggingLocation + "test.csv");
 			}
@@ -85,7 +85,7 @@ public class HelixLogger {
 
 			StringBuilder data = new StringBuilder();
 			data.append(Instant.now().toString()).append(",");
-			data.append(DriverStation.getInstance().getMatchTime()).append(",");
+			data.append(DriverStation.getMatchTime()).append(",");
 			data.append(getValues());
 			Files.write(file, Collections.singletonList(data.toString()), StandardOpenOption.APPEND);
 		} catch (Exception e) {

@@ -154,19 +154,19 @@ public class BobTalonSRX extends TalonSRX implements BobSmartMotorController{
 		this.configRemoteFeedbackFilter(remoteDeviceId, remoteSensorSource, 1);
 	}
 
-	public int getPrimarySensorPosition() {
+	public double getPrimarySensorPosition() {
 		return this.getSelectedSensorPosition(primaryPidIndex);
 	}
 
-	public int getSecondarySensorPosition() {
+	public double getSecondarySensorPosition() {
 		return this.getSelectedSensorPosition(secondaryPidIndex);
 	}
 
-	public int getPrimarySensorVelocity() {
+	public double getPrimarySensorVelocity() {
 		return this.getSelectedSensorVelocity(primaryPidIndex);
 	}
 
-	public int getSecondarySensorVelocity() {
+	public double getSecondarySensorVelocity() {
 		return this.getSelectedSensorVelocity(secondaryPidIndex);
 	}
 	// ----------- ADDING DEFAULT VALUES --------- //
@@ -267,11 +267,11 @@ public class BobTalonSRX extends TalonSRX implements BobSmartMotorController{
 		return super.configGetParameter(param, ordinal, defaultTimeoutMs);
 	}
 
-	public int getSelectedSensorPosition() {
+	public double getSelectedSensorPosition() {
 		return super.getSelectedSensorPosition(defaultPidIndex);
 	}
 
-	public int getSelectedSensorVelocity() {
+	public double getSelectedSensorVelocity() {
 		return super.getSelectedSensorVelocity(defaultPidIndex);
 	}
 
@@ -279,7 +279,7 @@ public class BobTalonSRX extends TalonSRX implements BobSmartMotorController{
 		super.selectProfileSlot(slotIdx, defaultPidIndex);
 	}
 
-	public int getClosedLoopError() {
+	public double getClosedLoopError() {
 		return super.getClosedLoopError(defaultPidIndex);
 	}
 
